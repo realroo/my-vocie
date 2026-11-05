@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        // Safe fetch handler to prevent 'Cannot set property fetch of #<Window> which has only a getter'
+        try {
+          var originalFetch = window.fetch;
+          var customFetch = undefined;
+          function getFetch() {
+            return customFetch || originalFetch || (typeof window !== 'undefined' ? window.fetch : undefined);
+          }
+          function setFetch(val) {
+            customFetch = val;
+          }
+          try {
+            Object.defineProperty(window, 'fetch', {
+              get: getFetch,
+              set: setFetch,
+              configurable: true,
+              enumerable: true,
+            });
+          } catch (_) {}
+          if (typeof window.Window !== 'undefined' && window.Window.prototype) {
+            try {
+              Object.defineProperty(window.Window.prototype, 'fetch', {
+                get: getFetch,
+                set: setFetch,
+                configurable: true,
+                enumerable: true,
+              });
+            } catch (_) {}
+          }
+        } catch (_) {}
+
+        // Global unhandled error & rejection suppression for iframe sandbox edge cases
+        window.onerror = function(msg, url, line, col, error) {
+          if (!msg || msg === 'Script error.' || (typeof msg === 'string' && (msg.indexOf('fetch') !== -1 || msg.indexOf('getter') !== -1))) {
+            return true;
+          }
+          return false;
+        };
+        window.addEventListener('error', function(e) {
+          if (!e.message || (typeof e.message === 'string' && (e.message.indexOf('fetch') !== -1 || e.message.indexOf('getter') !== -1))) {
+            if (e.preventDefault) e.preventDefault();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+        window.addEventListener('unhandledrejection', function(e) {
+          if (e.preventDefault) e.preventDefault();
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+        }, true);
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocalis AI - Voice Cloning & Audio Synthesis Studio</title>
+    <meta name="description" content="Next-generation AI voice cloning studio featuring speech-to-speech, text-to-speech, accent switching, emotion & seductive tone modulation, and immersive ASMR acoustic design." />
+    <meta property="og:title" content="Vocalis AI - Voice Cloning & Audio Synthesis Studio" />
+    <meta property="og:description" content="Next-generation AI voice cloning studio featuring speech-to-speech, text-to-speech, accent switching, emotion & seductive tone modulation, and immersive ASMR acoustic design." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-neutral-950 text-neutral-100 antialiased selection:bg-rose-500/30 selection:text-rose-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

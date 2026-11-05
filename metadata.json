@@ -1,0 +1,6 @@
+{
+  "name": "Vocalis AI - Voice Cloning & Audio Synthesis Studio",
+  "description": "Next-generation AI voice cloning studio featuring speech-to-speech, text-to-speech, accent switching, emotion & seductive tone modulation, and immersive ASMR acoustic design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
